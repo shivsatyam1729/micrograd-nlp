@@ -13,17 +13,16 @@ class Value:
     """Stores a single scalar value and the subgraph that produced it."""
  
     # Fixed set of instance attributes -> no per-instance __dict__.
-    # Matters a lot once you have millions of these in memory.
     __slots__ = ("data", "grad", "_backward", "_prev", "_op", "label", "_id")
     _counter = 0  # class-level, gives every Value a unique debug id
 
     def __init__(self, data, _children=(), _op="", label=""):
         self.data = data
         self.grad = 0.0
-        self._backward = lambda: None          # filled in by each op below
-        self._prev = set(_children)             # parents in the graph
-        self._op = _op                          # op that produced this node
-        self.label = label                      # optional, for debugging/graphviz
+        self._backward = lambda: None           # filled in by each op below
+        self._prev = set(_children)              # parents in the graph
+        self._op = _op                            # op that produced this node
+        self.label = label                         # optional, for debugging/graphviz
  
         Value._counter += 1
         self._id = Value._counter
